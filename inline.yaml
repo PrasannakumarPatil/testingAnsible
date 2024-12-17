@@ -17,14 +17,14 @@
     - name: Check if the command was successful
       debug:
         msg: "The script ran successfully."
-      when: script_output.rc == 0
+      when: script_output is defined and script_output.rc is defined and script_output.rc == 0
 
     - name: Display script output
       debug:
         var: script_output.stdout_lines
-      when: script_output.stdout is defined
+      when: script_output is defined and script_output.stdout is defined
 
     - name: Show error output if script fails
       debug:
         var: script_output.stderr_lines
-      when: script_output.stderr is defined
+      when: script_output is defined and script_output.stderr is defined

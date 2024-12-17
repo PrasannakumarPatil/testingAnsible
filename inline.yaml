@@ -7,12 +7,21 @@
       shell: |
         echo "staring the script"
         uptime
-        echo "disk usage"
         df -h
-        echo "CPU load"
         top -bn1 | head -n 10
         echo "Script execution completed"
-      register: script_out
+      register: script_output
+      ignore_errors: true
+    - name: check if the command was successful
+      debug:
+        msg: "The script ran successful"
+       when: script_output.rc == 0
     - name: Display out
+      debug:
+        var: script_output.stdout_lines
+       when: script_output.stdout is defined
+       
+    - name: show errors
       debug: 
-        var: script_out.stdout
+        var: script_output.stderr_lines
+       when: script_output.stderr is defined

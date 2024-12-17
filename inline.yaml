@@ -1,13 +1,19 @@
 ---
 - name: Fetch server load average
-  hosts: all
+  hosts: vsi_hosts
   become: no
   tasks:
 
-    - name: Get load average
+    - name: Run uptime command to get load average
       command: uptime
       register: server_load
+      ignore_errors: true  # Allow the task to fail without stopping the playbook
 
-    - name: Display server load
+    - name: Debug the entire server_load variable
+      debug:
+        var: server_load
+
+    - name: Display server load if stdout is defined
       debug:
         msg: "Server Load: {{ server_load.stdout }}"
+      when: server_load.stdout is defined

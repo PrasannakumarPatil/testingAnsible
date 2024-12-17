@@ -1,6 +1,6 @@
 ---
 - name: Fetch server load average
-  hosts: vsi_hosts
+  hosts: all
   become: no
   tasks:
 

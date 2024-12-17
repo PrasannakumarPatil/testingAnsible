@@ -1,27 +1,30 @@
 ---
-- name: Run an inline script
+- name: Run inline script on VSI and handle output
   hosts: all
   become: yes
   tasks:
-    - name: Execute a sampple inline script
+
+    - name: Execute a simple inline script
       shell: |
-        echo "staring the script"
+        echo "Starting the script execution on VSI"
         uptime
         df -h
         top -bn1 | head -n 10
-        echo "Script execution completed"
+        echo "Script execution completed."
       register: script_output
       ignore_errors: true
-    - name: check if the command was successful
+
+    - name: Check if the command was successful
       debug:
-        msg: "The script ran successful"
-       when: script_output.rc == 0
-    - name: Display out
+        msg: "The script ran successfully."
+      when: script_output.rc == 0
+
+    - name: Display script output
       debug:
         var: script_output.stdout_lines
-       when: script_output.stdout is defined
-       
-    - name: show errors
-      debug: 
+      when: script_output.stdout is defined
+
+    - name: Show error output if script fails
+      debug:
         var: script_output.stderr_lines
-       when: script_output.stderr is defined
+      when: script_output.stderr is defined

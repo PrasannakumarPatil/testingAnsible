@@ -1,18 +1,13 @@
 ---
-- name: Run inline script on VSI and handle output
+- name: Fetch server load average
   hosts: all
-  become: yes
+  become: no
   tasks:
 
-    - name: Execute a simple inline script
-      shell: |
-        set -e
-        echo "Starting the script execution on VSI"
-        uptime
-        df -h
-        top -bn1 | head -n 10
-        echo "Script execution completed."
-      register: script_output
-     - name: Display full script output
+    - name: Get load average
+      command: uptime
+      register: server_load
+
+    - name: Display server load
       debug:
-        var: script_output
+        msg: "Server Load: {{ server_load.stdout }}"

@@ -6,15 +6,13 @@
 
     - name: Execute a simple inline script
       shell: |
+        set -e
         echo "Starting the script execution on VSI"
         uptime
         df -h
         top -bn1 | head -n 10
         echo "Script execution completed."
       register: script_output
-    - name: Display script output
+     - name: Display full script output
       debug:
-        var: script_output.stdout_lines
-    - name: Show error output if script fails
-      debug:
-        var: script_output.stderr_lines
+        var: script_output
